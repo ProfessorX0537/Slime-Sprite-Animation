@@ -3,15 +3,30 @@ class Slime{
         this.game = game;
         this.animator = new animator(ASSET_MANAGER.getAsset("./Slime-sheet4.png"), 0, 0, 24, 16, 6, .3);
         
-        this.x = 0;
-        this.y = 0;
-        this.speed = 70;
+        this.x = 448;
+        this.y = 320;
+        this.speed = 150;
     };
 
     update() {
-        //should move character to this right
-        this.x += this.speed * this.game.clockTick;
-        if(this.x > 1024) this.x = 0;
+        
+        if(this.x > 1024 || this.x < 0) this.x = 0;
+        if(this.y > 768 || this.y < 0) this.y = 0;
+
+        if(this.game.keys["w"]) {
+            this.y -= this.speed * this.game.clockTick;
+        }
+        if(this.game.keys["a"]) {
+            this.x -= this.speed * this.game.clockTick;
+        }
+        if(this.game.keys["s"]) {
+            this.y += this.speed * this.game.clockTick;
+        }
+        if(this.game.keys["d"]) {
+            this.x += this.speed * this.game.clockTick;
+        }
+
+
     };
 
     draw(ctx) {
