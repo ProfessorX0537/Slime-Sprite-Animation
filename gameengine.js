@@ -10,6 +10,14 @@ class GameEngine {
         this.entities = [];
 
         // Information on the input
+        this.left = false;
+        this.right = false;
+        this.up = false;
+        this.down = false;
+        this.A = false;
+        this.B = false;
+        this.gamepad = null;
+
         this.click = null;
         this.mouse = null;
         this.wheel = null;
@@ -72,8 +80,9 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
-        this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
+        //declares keyboard active and listens for keyboard events
+        this.ctx.canvas.addEventListener("keydown", event => {this.keyboardActive = true; this.keys[event.key] = true;});
+        this.ctx.canvas.addEventListener("keyup", event => {this.keyboardActive = false; this.keys[event.key] = false});
     };
 
     addEntity(entity) {
@@ -90,8 +99,25 @@ class GameEngine {
         }
     };
 
+    // Tracks and updates input from the gamepad
+    gamepadUpdate() {
+        this.gamepad = navigator.getGamepads()[0];
+        let gamepad = this.gamepad;
+        if (gamepad != null && !this.keyboardActive) {
+            this.A = gamepad.buttons[0].pressed;
+            this.B = gamepad.buttons[1].pressed;
+            //checks if d-pad is used or joysticks meet a certain threshold
+            this.left = gamepad.buttons[14].pressed || gamepad.axes[0] < -0.3;
+            this.right = gamepad.buttons[15].pressed || gamepad.axes[0] > 0.3;
+            this.up = gamepad.buttons[12].pressed || gamepad.axes[1] < -0.3;
+            this.down = gamepad.buttons[13].pressed || gamepad.axes [1] > 0.3;
+        }
+    }
+
     update() {
         let entitiesCount = this.entities.length;
+
+        this.gamepadUpdate();
 
         for (let i = 0; i < entitiesCount; i++) {
             let entity = this.entities[i];
