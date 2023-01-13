@@ -12,18 +12,25 @@ class Slime{
         
         if(this.x > 1024 || this.x < 0) this.x = 0;
         if(this.y > 768 || this.y < 0) this.y = 0;
-
-        if(this.game.keys["w"]) {
+        
+        //Controls work with keyboard and a gamepad
+        if(this.game.keys["w"] || this.game.up) {
             this.y -= this.speed * this.game.clockTick;
         }
-        if(this.game.keys["a"]) {
+        if(this.game.keys["a"] || this.game.left) {
             this.x -= this.speed * this.game.clockTick;
         }
-        if(this.game.keys["s"]) {
+        if(this.game.keys["s"] || this.game.down) {
             this.y += this.speed * this.game.clockTick;
         }
-        if(this.game.keys["d"]) {
+        if(this.game.keys["d"] || this.game.right) {
             this.x += this.speed * this.game.clockTick;
+        }
+        if(this.game.keys[" "] || this.game.A) {
+            console.log("jump");
+        }
+        if(this.game.keys["j"] || this.game.B) {
+            console.log("smash")
         }
 
 
